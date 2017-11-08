@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>fcc_React_Redux</title>
+  </head>
+
+
+  <body>
+    <input type="text" id="input">
+    <input type="submit" id="submit">
+    <div id="displayTodo"></div>
+
+    <input type="text" id="number">
+    <input type="submit" id="addNum">
+    <div id="displayNumber"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/3.7.2/redux.min.js"></script>
+
+    <script>
+      const fccReducer = Redux.combineReducers({
+        todo: (state = [], action) => {
+          if (action.type === 'ADD_TODO'){
+            state.push(action.value);
+            return state;
+          }
+          if (action.type === 'REMOVE_TODO'){
+            state.splice(action.value,1);
+            return state;
+          }
+          return state;
+        }
+      })
+      const fccStore = Redux.createStore(fccReducer);
+
+      const render = (str = '') => {
+        arr = fccStore.getState().todo;
+        arr.forEach((ele,index) => {
+          str = str + '<div id="'+index+'">' + ele + '</div>';
+        })
+        document.getElementById('displayTodo').innerHTML = str;
+        arr.forEach((ele, index) => {
+          document.getElementById(index).onclick = () => {
+            fccStore.dispatch({
+              type: 'REMOVE_TODO',
+              value: index
+            });
+            render();
+          }
+        })
+      }
+      render();
+      document.getElementById('submit').onclick = () => {
+        fccStore.dispatch({
+          type: 'ADD_TODO',
+          value: document.getElementById('input').value
+        })
+        render();
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Quick Math</title>
+  </head>
+  <body>
+    <h1>Quick Math</h1>
+
+    <input id="addNum" type="number">
+    <input id ="addBut" type="submit" value="ADD">
+    <input id="minus" type="submit" value="MINUS">
+
+    <div id="displayNumber"></div>
+
+    <br><br><br><br><br>
+    <p>reducer --> store --> components --> action --> dispatch --> <br />
+    initial State<br />
+    Reducer makes changes state base off what the action functions<br />
+    Reducer receives 2 parameter (state, action)</p>
+
+    <div class="img">
+      <img src="redux-flow-chart.png" height="220px">
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/3.7.2/redux.min.js"></script>
+    <script>
+
+      //Set up Reducer
+      const calculate = (state = {count: 0}, action) => {
+        if (action.type === "ADD") {
+            return { count: state.count + action.value };
+        }
+        if (action.type === "SUBTRACT") {
+          return { count: state.count - action.value };
+        }
+        return state;
+      };
+
+      const render = () => {
+        document.getElementById('displayNumber').innerHTML = store.getState().count
+      }
+
+
+
+      // const reducers = Redux.combineReducers({})
+
+      // Set up Store.. can default value here
+      const store = Redux.createStore(calculate);
+
+      // Listener
+      store.subscribe(() => {
+        console.log("store changed ", store.getState());
+        render()
+      })
+
+      //Dispatch Events action.type
+      // store.dispatch({ type: "ADD", value: 1 })
+      // store.dispatch({ type: "ADD", value: 1 })
+
+      // dispatch --> action --> reducer --> state
+
+      // store.dispatch({ type: "DEC", value: 10 })
+
+
+      document.getElementById('addBut').onclick = () => {
+        store.dispatch ({
+          type: 'ADD', value: + document.getElementById('addNum').value
+        })
+      }
+
+      document.getElementById('minus').onclick = () => {
+        store.dispatch ({
+          type: 'SUBTRACT',
+          value: + document.getElementById('addNum').value
+        })
+      }
+      render()
+
+
+    </script>
+
+
+  </body>
+</html>
